@@ -1,3 +1,4 @@
+// Constante para o gerenciamento dos status code
 export const StatusCode = {
   BAD_REQUEST: 400,
 
