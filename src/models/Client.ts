@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, Entity, PrimaryColumn } from "typeorm";
 
+// Definições da entidade, junto de seu nome e especificações das colunas
 @Entity("t_cliente")
 export class Client {
   @PrimaryColumn()

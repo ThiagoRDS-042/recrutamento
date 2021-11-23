@@ -7,7 +7,9 @@ import createConnection from "./database";
 import { AppError } from "./errors/AppErrors";
 import * as routes from "./routes/index";
 
+// cria a conexão com o DB
 createConnection();
+
 // Inicia uma aplicação express
 const app = express();
 
@@ -16,6 +18,7 @@ app.use(cors());
 app.use(express.json());
 app.use(routes.routerClient);
 
+// tratamento de exceções
 app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
   if (error instanceof AppError) {
     return res.status(error.statusCode).json({ Message: error.message });
@@ -24,5 +27,5 @@ app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
   return res.status(500).json({ Message: error.message });
 });
 
-// Inicia o servidor da api na porta 3333
-app.listen(3333, () => console.log("Servidor Rodando!"));
+// Inicia o servidor da api na porta 2222
+app.listen(2222, () => console.log("Servidor Rodando!"));
