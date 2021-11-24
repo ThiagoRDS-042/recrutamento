@@ -1,4 +1,4 @@
-import { getCustomRepository, Like, Repository } from "typeorm";
+import { getCustomRepository, IsNull, Like, Not, Repository } from "typeorm";
 import * as Yup from "yup";
 
 import { Messages, StatusCode } from "../utils";
@@ -69,6 +69,12 @@ export class ClientService {
       } else {
         await clientRepository.update(clientAlreadyExists.id, {
           data_remocao: null,
+          tipo,
+        });
+
+        // Atualizando o objeto clientExists
+        Object.assign(clientAlreadyExists, {
+          tipo,
         });
 
         // Retorna o cliente ativado
@@ -104,7 +110,7 @@ export class ClientService {
     }
 
     // Validando o tipo de cliente
-    if (!clientTypes.includes(tipo)) {
+    if (tipo && !clientTypes.includes(tipo)) {
       throw new AppError(
         Messages.CLIENT_TYPE_NOT_EXISTS,
         StatusCode.BAD_REQUEST
@@ -114,10 +120,13 @@ export class ClientService {
     // Utilizando o repositório
     const clientRepository = this.clientRepository;
 
-    // Pesquisando um cliente pelo nome
-    const clientExists = await clientRepository.findOne({ id });
+    // Pesquisando um cliente pelo id
+    const clientExists = await clientRepository.findOne({
+      id,
+      data_remocao: null,
+    });
 
-    // Validando se existe um cliente o id informado
+    // Validando se existe um cliente com o id informado e data de remoção nula
     if (!clientExists) {
       throw new AppError(Messages.CLIENT_NOT_FOUND, StatusCode.BAD_REQUEST);
     }
@@ -222,48 +231,20 @@ export class ClientService {
     // Utilizando o repositório
     const clientRepository = this.clientRepository;
 
-    // Criando um objeto para ser interado
-    let clients: Client[];
-
-    // Verificando se foi informado o tipo
-    if (tipo) {
-      // Verificando se o tipo é valido
-      if (!clientTypes.includes(tipo)) {
-        throw new AppError(
-          Messages.CLIENT_TYPE_NOT_EXISTS,
-          StatusCode.BAD_REQUEST
-        );
-      }
-
-      // Verificando se foi informado o nome
-      if (nome) {
-        // Pesquisando por data de remoção nula, tipo e nome aproximado
-        clients = await clientRepository.find({
-          data_remocao: null,
-          tipo,
-          nome: Like(`%${nome}%`),
-        });
-      } else {
-        // Pesquisando por data de remoção nula e tipo
-        clients = await clientRepository.find({
-          data_remocao: null,
-          tipo,
-        });
-      }
-      // caso so seja informado o nome
-    } else if (nome) {
-      // Pesquisando por data de remoção nula e nome aproximado
-      clients = await clientRepository.find({
-        data_remocao: null,
-        nome: Like(`%${nome}%`),
-      });
-      // caso não seja informado nenhum dos dois (tipo, nome)
-    } else {
-      // Pesquisando por data de remoção nula
-      clients = await clientRepository.find({
-        data_remocao: null,
-      });
+    // Verificando se o tipo é valido
+    if (tipo && !clientTypes.includes(tipo)) {
+      throw new AppError(
+        Messages.CLIENT_TYPE_NOT_EXISTS,
+        StatusCode.BAD_REQUEST
+      );
     }
+
+    // pesquisando os endereços, caso não seja passado algum dos valores (nome, tipo), ele busca por uma ocorrência não nula no DB
+    const clients = await clientRepository.find({
+      data_remocao: null,
+      nome: nome ? Like(`%${nome}%`) : Not(IsNull()),
+      tipo: tipo || Not(IsNull()),
+    });
 
     // Validando se algo foi encontrado
     if (clients.length === 0) {

@@ -6,4 +6,7 @@ export const Messages = {
   CLIENT_TYPE_NOT_EXISTS: "Tipo de cliente incorreto!",
   CLIENT_ALREADY_EXISTS: "Nome de cliente já existe, tente novamente!",
   CLIENT_NOT_FOUND: "Cliente não encontrado!",
+
+  ADDRESS_ALREADY_EXISTS: "Endereço já existe, tente novamente!",
+  ADDRESS_NOT_FOUND: "Endereço não encontrado!",
 };
