@@ -9,4 +9,7 @@ export const Messages = {
 
   ADDRESS_ALREADY_EXISTS: "Endereço já existe, tente novamente!",
   ADDRESS_NOT_FOUND: "Endereço não encontrado!",
+
+  PONTO_ALREADY_EXISTS: "Ponto já existe, tente novamente!",
+  PONTO_NOT_FOUND: "Ponto não encontrado!",
 };

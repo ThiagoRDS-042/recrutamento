@@ -1,4 +1,5 @@
 import { routerClient } from "./routesClient";
 import { routerAddress } from "./routesAddress";
+import { routerPonto } from "./routesPonto";
 
-export { routerClient, routerAddress };
+export { routerClient, routerAddress, routerPonto };

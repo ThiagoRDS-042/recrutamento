@@ -6,6 +6,7 @@ import { AppError } from "../errors/AppErrors";
 import { AddressesRepository } from "../repositories/AddressRepository";
 import { Address } from "../models/Address";
 import { AddressDTO } from "../models/DTOs/AddressDTO";
+import { PontoService } from "./PontoService";
 
 // Criando uma interface do endereço
 interface IAddress {
@@ -216,6 +217,10 @@ export class AddressService {
     await addressRepository.update(id, {
       data_remocao: new Date(),
     });
+
+    const pontoService = new PontoService();
+
+    await pontoService.deleteByAddressId(id);
   }
 
   async find({ logradouro, bairro, numero }: IAddress) {
