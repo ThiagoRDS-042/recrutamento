@@ -81,7 +81,7 @@ export class ClientController {
     // Pesquisando Clientes
     const clients = await clientService.find(dados);
 
-    // Retornando os Clientes atualizados junto do status
+    // Retornando os Clientes pesquisados junto do status
     return res.status(StatusCode.OK).json({ dados: clients });
   }
 }

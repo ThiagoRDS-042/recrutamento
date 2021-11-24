@@ -16,7 +16,7 @@ const app = express();
 // configurações do servidor
 app.use(cors());
 app.use(express.json());
-app.use(routes.routerClient);
+app.use(routes.routerClient, routes.routerAddress);
 
 // tratamento de exceções
 app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
