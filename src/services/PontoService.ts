@@ -8,6 +8,7 @@ import { PontoRepository } from "../repositories/PontoRepository";
 import { ClientService } from "./ClientService";
 import { AddressService } from "./AddressService";
 import { PontoDTO } from "../models/DTOs/PontoDTO";
+import { ContractService } from "./ContractService";
 
 // Criando uma interface do ponto
 interface IPonto {
@@ -102,6 +103,38 @@ export class PontoService {
     return PontoDTO.convertPontoToDTO(ponto);
   }
 
+  async findById(id: string) {
+    // validação dos dados
+    const schema = Yup.object().shape({
+      id: Yup.string().required(Messages.REQUIRED_FIELD),
+    });
+
+    try {
+      await schema.validate({
+        id,
+      });
+    } catch (error) {
+      throw new AppError(error.message, StatusCode.BAD_REQUEST);
+    }
+
+    // Utilizando o repositório
+    const pontoRepository = this.pontoRepository;
+
+    // Pesquisando um ponto pelo id e com data de remoção nula
+    const pontoExists = await pontoRepository.findOne({
+      id,
+      data_remocao: null,
+    });
+
+    // Verificando se encontrou algo
+    if (!pontoExists) {
+      throw new AppError(Messages.PONTO_NOT_FOUND, StatusCode.BAD_REQUEST);
+    }
+
+    // Retornando o ponto encontrado
+    return PontoDTO.convertPontoToDTO(pontoExists);
+  }
+
   async delete(id: string) {
     // validação dos dados
     const schema = Yup.object().shape({
@@ -134,6 +167,10 @@ export class PontoService {
     await pontoRepository.update(id, {
       data_remocao: new Date(),
     });
+
+    const contractService = new ContractService();
+
+    await contractService.deleteByPontoId(id);
   }
 
   async deleteByAddressId(endereco_id: string) {

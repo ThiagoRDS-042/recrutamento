@@ -15,9 +15,9 @@ export class Client {
   @Column()
   nome: string;
 
-  @CreateDateColumn()
-  data_remocao: Date;
-
   @Column()
   tipo: string;
+
+  @CreateDateColumn()
+  data_remocao: Date;
 }
