@@ -6,6 +6,7 @@ import { AppError } from "../errors/AppErrors";
 import { Client } from "../models/Client";
 import { ClientRepository } from "../repositories/ClientRepository";
 import { ClientDTO } from "../models/DTOs/ClientDTO";
+import { PontoService } from "./PontoService";
 
 // Criando uma constante para a validação dos tipos de clientes
 const clientTypes = ["juridico", "fisico", "especial"];
@@ -225,6 +226,10 @@ export class ClientService {
     await clientRepository.update(id, {
       data_remocao: new Date(),
     });
+
+    const pontoService = new PontoService();
+
+    await pontoService.deleteByClienteId(id);
   }
 
   async find({ nome, tipo }: IClient) {

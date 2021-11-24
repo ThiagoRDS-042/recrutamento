@@ -15,12 +15,12 @@ export class Address {
   @Column()
   logradouro: string;
 
-  @CreateDateColumn()
-  data_remocao: Date;
-
   @Column()
   bairro: string;
 
   @Column()
   numero: number;
+
+  @CreateDateColumn()
+  data_remocao: Date;
 }
