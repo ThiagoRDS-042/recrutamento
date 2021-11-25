@@ -22,6 +22,4 @@ Por fim, a aplicação estará disponível em `http://localhost:2222`
 
 ### Autor
 
----
-
 Feito por ❤️ Thiago Rodrigues 👋🏽
