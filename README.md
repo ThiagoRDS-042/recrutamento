@@ -19,3 +19,9 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 - Abra outro terminal e digite `yarn typeorm migration:run` para criar as tabelas no banco de dados.
 
 Por fim, a aplicação estará disponível em `http://localhost:2222`
+
+### Autor
+
+---
+
+Feito por ❤️ Thiago Rodrigues 👋🏽
