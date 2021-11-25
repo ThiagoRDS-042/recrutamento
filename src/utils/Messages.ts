@@ -19,5 +19,7 @@ export const Messages = {
   CONTRACT_ALREADY_EXISTS: "Contrato já existe, tente novamente!",
   CONTRACT_NOT_FOUND: "Contrato não encontrado!",
 
+  EVENT_CONTRACT_NOT_FOUND: "Histórico de contrato não encontrado!",
+
   UNAUTHORIZED: "Ação não permitida!",
 };

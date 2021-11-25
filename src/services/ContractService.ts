@@ -7,6 +7,7 @@ import { PontoService } from "./PontoService";
 import { Contract } from "../models/Contract";
 import { ContractRepository } from "../repositories/ContractRepository";
 import { ContractDTO } from "../models/DTOs/ContractDTO";
+import { EventContractService } from "./EventContractService";
 
 const contractStates = ["Em vigor", "Desativado Temporario", "Cancelado"];
 
@@ -173,10 +174,24 @@ export class ContractService {
       estado === contractStates[2]
     ) {
       throw new AppError(Messages.UNAUTHORIZED, StatusCode.BAD_REQUEST);
+    } else if (contractExists.estado === estado) {
+      throw new AppError(Messages.UNAUTHORIZED, StatusCode.BAD_REQUEST);
     }
 
     // Atualizando o contrato com o novo estado
     await contractRepository.update(id, { estado });
+
+    // Instanciando eventContractService
+    const eventContractService = new EventContractService();
+
+    const eventContract = {
+      contrato_id: contractExists.id,
+      estado_anterior: contractExists.estado,
+      estado_posterior: estado,
+    };
+
+    // Criando um novo evento de contrato
+    await eventContractService.create(eventContract);
 
     // Atualizando o objeto contractExists
     Object.assign(contractExists, { estado });

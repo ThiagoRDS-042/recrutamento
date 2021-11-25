@@ -20,7 +20,8 @@ app.use(
   routes.routerClient,
   routes.routerAddress,
   routes.routerPonto,
-  routes.routerContract
+  routes.routerContract,
+  routes.routerEventContract
 );
 
 // tratamento de exceções
