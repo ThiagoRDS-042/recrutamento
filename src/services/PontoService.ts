@@ -201,11 +201,15 @@ export class PontoService {
       throw new AppError(Messages.PONTO_NOT_FOUND, StatusCode.BAD_REQUEST);
     }
 
+    const contractService = new ContractService();
+
     for (const ponto of pontos) {
       // Atualizando o campo de remoção com a data e hora atual
       await pontoRepository.update(ponto.id, {
         data_remocao: new Date(),
       });
+
+      await contractService.deleteByPontoId(ponto.id);
     }
   }
 
@@ -237,11 +241,15 @@ export class PontoService {
       throw new AppError(Messages.PONTO_NOT_FOUND, StatusCode.BAD_REQUEST);
     }
 
+    const contractService = new ContractService();
+
     for (const ponto of pontos) {
       // Atualizando o campo de remoção com a data e hora atual
       await pontoRepository.update(ponto.id, {
         data_remocao: new Date(),
       });
+
+      await contractService.deleteByPontoId(ponto.id);
     }
   }
 

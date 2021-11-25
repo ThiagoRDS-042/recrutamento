@@ -66,6 +66,18 @@ export class ContractService {
           estado,
         });
 
+        // Instanciando eventContractService
+        const eventContractService = new EventContractService();
+
+        const eventContract = {
+          contrato_id: contractAlreadyExists.id,
+          estado_anterior: estado,
+          estado_posterior: estado,
+        };
+
+        // Criando um novo evento de contrato
+        await eventContractService.create(eventContract);
+
         // Retorna o contrato ativado
         return ContractDTO.convertPontoToDTO(contractAlreadyExists);
       }
@@ -76,6 +88,21 @@ export class ContractService {
 
     // Salvando o contrato
     await contractRepository.save(contract);
+
+    // pesquisando o contrato criado para pegar seu id
+    const contractExists = await contractRepository.findOne({ ponto_id });
+
+    // Instanciando eventContractService
+    const eventContractService = new EventContractService();
+
+    const eventContract = {
+      contrato_id: contractExists.id,
+      estado_anterior: estado,
+      estado_posterior: estado,
+    };
+
+    // Criando um novo evento de contrato
+    await eventContractService.create(eventContract);
 
     // Retornando o contrato criado
     return ContractDTO.convertPontoToDTO(contract);
